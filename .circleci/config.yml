@@ -16,7 +16,7 @@ jobs:
 
       - run:
           name: Install capnp
-          command: sudo apt-get install capnproto
+          command: sudo apt-get update && sudo apt-get install capnproto
 
       - run:
           name: configure NPM registry
