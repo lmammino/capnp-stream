@@ -15,6 +15,9 @@ With NPM:
 npm install --save capnp-stream
 ```
 
+Note that this module needs the [`capnp`](http://npm.im/capnp) module installed,
+which is not provided by default.
+
 
 ## Usage
 

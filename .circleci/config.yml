@@ -20,7 +20,7 @@ jobs:
 
       - run:
           name: install dependencies
-          command: sudo npm i -g npm && npm cache clean && npm install
+          command: sudo npm install -g npm@5.6.0 && npm install
 
       - save_cache:
           paths:

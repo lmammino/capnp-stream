@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/lmammino/capnp-stream#readme",
   "devDependencies": {
+    "capnp": "^0.2.0",
     "codecov": "^3.0.0",
     "eslint": "^4.16.0",
     "eslint-config-standard": "^11.0.0-beta.0",
@@ -46,7 +47,6 @@
     "pumpify": "^1.4.0"
   },
   "dependencies": {
-    "capnp": "^0.2.0",
     "readable-stream": "^2.3.3"
   }
 }
