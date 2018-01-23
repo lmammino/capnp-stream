@@ -15,6 +15,9 @@ With NPM:
 npm install --save capnp-stream
 ```
 
+**Note**: capnp binaries need to be available in your system. Check out the official
+[Cap’n Proto install guide](https://capnproto.org/install.html) for OS-specific instructions.
+
 
 ## Usage
 
