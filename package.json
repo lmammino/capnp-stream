@@ -43,7 +43,9 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "jest": "^22.1.4",
-    "pumpify": "^1.4.0"
+    "process-nextick-args": "^2.0.0",
+    "pumpify": "^1.4.0",
+    "util-deprecate": "^1.0.2"
   },
   "dependencies": {
     "capnp": ">=0.2.0",
