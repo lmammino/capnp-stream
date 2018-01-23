@@ -1,6 +1,6 @@
 {
   "name": "capnp-stream",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A readable stream for Cap’n Proto encoded binary input",
   "main": "index.js",
   "scripts": {

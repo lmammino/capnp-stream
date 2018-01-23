@@ -28,18 +28,24 @@ objects.
 ### Example usage:
 
 ```javascript
+const fs = require('fs')
 const capnp = require('capnp')
 const CapnpStream = require('capnp-stream')
 
 // import capnp schema
 const schema = capnp.import(join(__dirname, 'person.capnp'))
-// initialize stream
+
+// initialize stream for a given schema
 const capnpStream = new CapnpStream(schema.Person)
 
 // print as a JSON every object in the stream
 capnpStream.on('data', (d) => {
   console.log(JSON.stringify(d, null, 2))
 })
+
+// pipe the data file to the capnp-stream instance
+fs.createReadStream('someCapnpDataFile')
+  .pipe(capnpStream)
 ```
 
 
