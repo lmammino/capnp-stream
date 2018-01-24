@@ -3,8 +3,9 @@
 [![npm version](https://badge.fury.io/js/capnp-stream.svg)](http://badge.fury.io/js/capnp-stream)
 [![CircleCI](https://circleci.com/gh/lmammino/capnp-stream.svg?style=shield)](https://circleci.com/gh/lmammino/capnp-stream)
 [![codecov.io](https://codecov.io/gh/lmammino/capnp-stream/coverage.svg?branch=master)](https://codecov.io/gh/lmammino/capnp-stream)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-A Node.js readable stream for [Cap’n Proto](https://capnproto.org/) encoded binary input.
+A Node.js A readable and writebale stream for [Cap’n Proto](https://capnproto.org/).
 
 
 ## Install
@@ -25,18 +26,21 @@ npm install --save capnp-stream
 objects.
 
 
-### Example usage:
+### Example usages:
+
+Parse a Cap’n Proto encoded file
 
 ```javascript
-const fs = require('fs')
+const { createReadStream } = require('fs')
+const { join } = require('path')
 const capnp = require('capnp')
-const CapnpStream = require('capnp-stream')
+const { ParseStream } = require('capnp-stream')
 
 // import capnp schema
 const schema = capnp.import(join(__dirname, 'person.capnp'))
 
 // initialize stream for a given schema
-const capnpStream = new CapnpStream(schema.Person)
+const capnpStream = new ParseStream(schema.Person)
 
 // print as a JSON every object in the stream
 capnpStream.on('data', (d) => {
@@ -44,8 +48,27 @@ capnpStream.on('data', (d) => {
 })
 
 // pipe the data file to the capnp-stream instance
-fs.createReadStream('someCapnpDataFile')
+createReadStream('someCapnpDataFile')
   .pipe(capnpStream)
+```
+
+Encode a incoming objects stream to a Cap’n Proto file:
+
+```javascript
+const { createWriteStream } = require('fs')
+const { join } = require('path')
+const capnp = require('capnp')
+const { SerializeStream } = require('capnp-stream')
+
+// import capnp schema
+const schema = capnp.import(join(__dirname, 'person.capnp'))
+
+// initialize stream for a given schema
+const capnpStream = new SerializeStream(schema.Person)
+
+someObjectsStream // a stream that emits JavaScript objects that conform the capnp Schema
+  .pipe(capnpStream) // encodes the javascript objects to a capnp stream
+  .pipe(createWriteStream(join(__dirname, 'somefile.dat'))) // save the encoded capnp data to a file
 ```
 
 
