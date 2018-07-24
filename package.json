@@ -28,10 +28,16 @@
     "encoding",
     "decoding"
   ],
-  "author": {
-    "name": "Luciano Mammino",
-    "url": "https://loige.co"
-  },
+  "author": [
+    {
+      "name": "Luciano Mammino",
+      "url": "https://loige.co"
+    },
+    {
+      "name": "Josh Wheeler",
+      "url": "https://github.com/jwheels"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/lmammino/capnp-stream/issues"
