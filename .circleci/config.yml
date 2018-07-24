@@ -99,7 +99,7 @@ jobs:
 
     steps:
         - attach_workspace:
-            at: ~/
+            at: ~/capnp-stream
 
         - run:
             name: configure NPM registry
