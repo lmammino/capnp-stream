@@ -85,3 +85,23 @@ test('It should fail to serialize a non object chunk', (endTest) => {
       return endTest()
     })
 })
+
+test('It should emit an error', (endTest) => {
+  const err = new Error('Failed to parse')
+
+  capnp.parse = jest.fn((schema, buffer) => {
+    throw err
+  })
+
+  const input = createReadStream(join(__dirname, 'serialized.dat'))
+  const capnpStream = new ParseStream(schema.Person)
+
+  const stream = pumpify.obj(
+    input,
+    capnpStream
+  )
+  stream.on('error', (e) => {
+    expect(e).toBe(err)
+    return endTest()
+  })
+})

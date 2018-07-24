@@ -1,6 +1,6 @@
 {
   "name": "capnp-stream",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A readable and writebale stream for Cap’n Proto",
   "main": "index.js",
   "scripts": {
@@ -28,10 +28,16 @@
     "encoding",
     "decoding"
   ],
-  "author": {
-    "name": "Luciano Mammino",
-    "url": "https://loige.co"
-  },
+  "author": [
+    {
+      "name": "Luciano Mammino",
+      "url": "https://loige.co"
+    },
+    {
+      "name": "Josh Wheeler",
+      "url": "https://github.com/jwheels"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/lmammino/capnp-stream/issues"

@@ -16,14 +16,18 @@ class ParseStream extends Transform {
       this.buffer = Buffer.concat([this.buffer, chunk])
     }
 
-    let expectedSize = capnp.expectedSizeFromPrefix(this.buffer)
-    let data = null
+    try {
+      let expectedSize = capnp.expectedSizeFromPrefix(this.buffer)
+      let data = null
 
-    while (this.buffer.length >= expectedSize) {
-      data = capnp.parse(this.schema, this.buffer)
-      this.buffer = this.buffer.slice(expectedSize)
-      expectedSize = capnp.expectedSizeFromPrefix(this.buffer)
-      this.push(data)
+      while (this.buffer.length >= expectedSize) {
+        data = capnp.parse(this.schema, this.buffer)
+        this.buffer = this.buffer.slice(expectedSize)
+        expectedSize = capnp.expectedSizeFromPrefix(this.buffer)
+        this.push(data)
+      }
+    } catch (err) {
+      callback(err)
     }
 
     return callback()
