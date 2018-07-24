@@ -1,6 +1,6 @@
 {
   "name": "capnp-stream",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A readable and writebale stream for Cap’n Proto",
   "main": "index.js",
   "scripts": {
