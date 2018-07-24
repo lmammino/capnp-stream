@@ -93,13 +93,18 @@ jobs:
           name: coverage reporting
           command: npm run coverage:submit
 
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - capnp-stream/*
+
   deploy:
     docker:
       - image: circleci/node:8.10
 
     steps:
         - attach_workspace:
-            at: ~/capnp-stream
+            at: ~/
 
         - run:
             name: configure NPM registry
