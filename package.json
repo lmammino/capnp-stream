@@ -44,19 +44,19 @@
   },
   "homepage": "https://github.com/lmammino/capnp-stream#readme",
   "devDependencies": {
-    "codecov": "^3.0.0",
-    "eslint": "^4.16.0",
-    "eslint-config-standard": "^11.0.0-beta.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "jest": "^22.1.4",
-    "pumpify": "^1.4.0"
+    "codecov": "^3.0.4",
+    "eslint": "^5.2.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "jest": "^23.4.1",
+    "pumpify": "^1.5.1"
   },
   "dependencies": {
-    "capnp": ">=0.2.0",
-    "readable-stream": "^2.3.3"
+    "capnp": "^0.3.1",
+    "readable-stream": "^2.3.6"
   },
   "optionalDependencies": {
     "fsevents": "*"
