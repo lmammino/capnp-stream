@@ -59,6 +59,41 @@ test('It should parse a capnp file', (endTest) => {
     })
 })
 
+test('It should parse a capnp file using multiple partitions', (endTest) => {
+  const totalPartitions = 7
+  let completePartitions = 0
+  const parsedData = []
+
+  for (let i = 0; i < totalPartitions; ++i) {
+    const partitionIndex = i
+    const input = createReadStream(join(__dirname, 'serialized.dat'))
+    const capnpStream = new ParseStream(schema.Person, { totalPartitions, partitionIndex })
+    const stream = pumpify.obj(
+      input,
+      capnpStream
+    )
+    stream
+      .on('data', (d) => {
+        parsedData.push(d)
+      })
+      .on('finish', () => {
+        completePartitions += 1
+        if (completePartitions === totalPartitions) {
+          expect(parsedData.length).toEqual(data.length)
+          endTest()
+        }
+      })
+  }
+})
+
+test('It should throw when given an invalid configuration', (endTest) => {
+  const constructWithBadConfig = () => {
+    return new ParseStream(schema.Person, { totalPartitions: 4, partitionIndex: 4 })
+  }
+  expect(constructWithBadConfig).toThrow('Invalid')
+  endTest()
+})
+
 test('It should serialize an object stream to a capnp', (endTest) => {
   const input = new ReadableArray(data)
   const accumulator = []
