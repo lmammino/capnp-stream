@@ -5,7 +5,8 @@ const pumpify = require('pumpify')
 const capnp = require('capnp')
 const { ParseStream, SerializeStream } = require('../')
 const data = require('./data.json')
-const schema = capnp.import(join(__dirname, 'person.capnp'))
+const personSchema = capnp.import(join(__dirname, 'person.capnp'))
+const numberSchema = capnp.import(join(__dirname, 'number.capnp'))
 
 class ReadableArray extends Readable {
   constructor (data, options = {}) {
@@ -40,7 +41,7 @@ class WritableArray extends Writable {
 
 test('It should parse a capnp file', (endTest) => {
   const input = createReadStream(join(__dirname, 'serialized.dat'))
-  const capnpStream = new ParseStream(schema.Person)
+  const capnpStream = new ParseStream(personSchema.Person)
 
   const stream = pumpify.obj(
     input,
@@ -59,6 +60,53 @@ test('It should parse a capnp file', (endTest) => {
     })
 })
 
+test('It should be able to skip and and emit object at given intervals', (endTest) => {
+  const emitEvery = 2
+  const skip = 1
+
+  const parsedNumbers = []
+  const input = createReadStream(join(__dirname, 'numbers.dat'))
+  const capnpStream = new ParseStream(numberSchema.Number, { emitEvery, skip })
+  const stream = pumpify.obj(
+    input,
+    capnpStream
+  )
+
+  stream
+    .on('data', (d) => parsedNumbers.push(d.value))
+    .on('finish', () => {
+      expect(parsedNumbers).toMatchSnapshot()
+      endTest()
+    })
+})
+
+test('It should parse a capnp file using multiple partitions', (endTest) => {
+  const emitEvery = 7
+  let completePartitions = 0
+  const parsedData = []
+
+  for (let i = 0; i < emitEvery; ++i) {
+    const skip = i
+    const input = createReadStream(join(__dirname, 'serialized.dat'))
+    const capnpStream = new ParseStream(personSchema.Person, { emitEvery, skip })
+    const stream = pumpify.obj(
+      input,
+      capnpStream
+    )
+    stream
+      .on('data', (d) => {
+        parsedData.push(d)
+      })
+      .on('finish', () => {
+        completePartitions += 1
+        if (completePartitions === emitEvery) {
+          expect(parsedData.length).toEqual(data.length)
+          endTest()
+        }
+      })
+  }
+})
+
 test('It should serialize an object stream to a capnp', (endTest) => {
   const input = new ReadableArray(data)
   const accumulator = []
@@ -66,7 +114,7 @@ test('It should serialize an object stream to a capnp', (endTest) => {
   const expectedResult = readFileSync(join(__dirname, 'serialized.dat'))
 
   input
-    .pipe(new SerializeStream(schema.Person))
+    .pipe(new SerializeStream(personSchema.Person))
     .pipe(output)
     .on('finish', () => {
       const result = Buffer.concat(accumulator)
@@ -79,22 +127,22 @@ test('It should fail to serialize a non object chunk', (endTest) => {
   const input = new ReadableArray(['this is a string, not an object'])
 
   input
-    .pipe(new SerializeStream(schema.Person))
+    .pipe(new SerializeStream(personSchema.Person))
     .on('error', (err) => {
       expect(err.message).toEqual('Expected chunk must have been object, but received "string"')
       return endTest()
     })
 })
 
-test('It should emit an error', (endTest) => {
+test('It should emit an error when failing to decode capnp data', (endTest) => {
   const err = new Error('Failed to parse')
 
-  capnp.parse = jest.fn((schema, buffer) => {
+  capnp.parse = jest.fn((personSchema, buffer) => {
     throw err
   })
 
   const input = createReadStream(join(__dirname, 'serialized.dat'))
-  const capnpStream = new ParseStream(schema.Person)
+  const capnpStream = new ParseStream(personSchema.Person)
 
   const stream = pumpify.obj(
     input,

@@ -72,6 +72,35 @@ someObjectsStream // a stream that emits JavaScript objects that conform the cap
 ```
 
 
+## `skip` and `emitEvery` options (sharding)
+
+Sometimes you don't want to consume (emit) all the objects in the capnp stream. For instance, this is common when you are processing the stream in parallel multiple times with multiple processes and you want to easily implement a sharding mechanism.
+
+In these situations you can take advantage of the `skip` and `emitEvery` options that you can pass at construction time:
+
+```javascript
+const capnp = require('capnp')
+const { SerializeStream } = require('capnp-stream')
+
+// import capnp schema
+const schema = capnp.import(join(__dirname, 'person.capnp'))
+
+// initialize stream for a given schema
+const capnpStream = new SerializeStream(schema.Person, {
+  skip: process.env.SKIP,
+  emitEvery: process.env.EMIT_EVERY
+})
+```
+
+In this example, we pass through these options from environment variables. If you set your environment variables to be `SKIP=5` and `EMIT_EVERY=2` you will get the following objects emitted (0 based count):
+
+  - person #5
+  - person #7
+  - person #9
+  - person #11
+  - ...
+
+
 ## Contributing
 
 Everyone is very welcome to contribute to this project.
