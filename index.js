@@ -10,10 +10,6 @@ class ParseStream extends Transform {
     this.emitEvery = options.emitEvery
     this.skip = options.skip
     this.msgCounter = 0
-
-    if (!(this.skip < this.emitEvery)) {
-      throw new Error(`Invalid partition configuration. skip (${this.skip}) must be less than emitEvery (${this.emitEvery}`)
-    }
   }
 
   _transform (chunk, encoding, callback) {
