@@ -1,6 +1,6 @@
 {
   "name": "capnp-stream",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "A readable and writebale stream for Cap’n Proto",
   "main": "index.js",
   "scripts": {
@@ -45,18 +45,18 @@
   "homepage": "https://github.com/lmammino/capnp-stream#readme",
   "devDependencies": {
     "codecov": "^3.0.4",
-    "eslint": "^5.2.0",
+    "eslint": "^5.4.0",
     "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^7.0.1",
-    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-standard": "^3.1.0",
-    "jest": "^23.4.1",
+    "jest": "^23.5.0",
     "pumpify": "^1.5.1"
   },
   "dependencies": {
     "capnp": "^0.3.1",
-    "readable-stream": "^2.3.6"
+    "readable-stream": "^3.0.1"
   },
   "optionalDependencies": {
     "fsevents": "*"

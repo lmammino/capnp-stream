@@ -2,17 +2,17 @@ const { Transform } = require('readable-stream')
 const capnp = require('capnp')
 
 class ParseStream extends Transform {
-  constructor (schema, options = { totalPartitions: 1, partitionIndex: 0 }) {
+  constructor (schema, options = { emitEvery: 1, skip: 0 }) {
     options.objectMode = true
     super(options)
     this.schema = schema
     this.buffer = null
-    this.totalPartitions = options.totalPartitions
-    this.partitionIndex = options.partitionIndex
+    this.emitEvery = options.emitEvery
+    this.skip = options.skip
     this.msgCounter = 0
 
-    if (!(this.partitionIndex < this.totalPartitions)) {
-      throw new Error(`Invalid partition configuration. partitionIndex (${this.partitionIndex}) must be less than totalPartitions (${this.totalPartitions}`)
+    if (!(this.skip < this.emitEvery)) {
+      throw new Error(`Invalid partition configuration. skip (${this.skip}) must be less than emitEvery (${this.emitEvery}`)
     }
   }
 
@@ -28,7 +28,7 @@ class ParseStream extends Transform {
       let data = null
 
       while (this.buffer.length >= expectedSize) {
-        if (this.partitionIndex === (this.msgCounter % this.totalPartitions)) {
+        if (this.skip === (this.msgCounter % this.emitEvery)) {
           data = capnp.parse(this.schema, this.buffer)
           this.push(data)
         }

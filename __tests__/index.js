@@ -60,14 +60,14 @@ test('It should parse a capnp file', (endTest) => {
 })
 
 test('It should parse a capnp file using multiple partitions', (endTest) => {
-  const totalPartitions = 7
+  const emitEvery = 7
   let completePartitions = 0
   const parsedData = []
 
-  for (let i = 0; i < totalPartitions; ++i) {
-    const partitionIndex = i
+  for (let i = 0; i < emitEvery; ++i) {
+    const skip = i
     const input = createReadStream(join(__dirname, 'serialized.dat'))
-    const capnpStream = new ParseStream(schema.Person, { totalPartitions, partitionIndex })
+    const capnpStream = new ParseStream(schema.Person, { emitEvery, skip })
     const stream = pumpify.obj(
       input,
       capnpStream
@@ -78,7 +78,7 @@ test('It should parse a capnp file using multiple partitions', (endTest) => {
       })
       .on('finish', () => {
         completePartitions += 1
-        if (completePartitions === totalPartitions) {
+        if (completePartitions === emitEvery) {
           expect(parsedData.length).toEqual(data.length)
           endTest()
         }
@@ -88,7 +88,7 @@ test('It should parse a capnp file using multiple partitions', (endTest) => {
 
 test('It should throw when given an invalid configuration', (endTest) => {
   const constructWithBadConfig = () => {
-    return new ParseStream(schema.Person, { totalPartitions: 4, partitionIndex: 4 })
+    return new ParseStream(schema.Person, { emitEvery: 4, skip: 4 })
   }
   expect(constructWithBadConfig).toThrow('Invalid')
   endTest()
@@ -121,7 +121,7 @@ test('It should fail to serialize a non object chunk', (endTest) => {
     })
 })
 
-test('It should emit an error', (endTest) => {
+test('It should emit an error when failing to decode capnp data', (endTest) => {
   const err = new Error('Failed to parse')
 
   capnp.parse = jest.fn((schema, buffer) => {
